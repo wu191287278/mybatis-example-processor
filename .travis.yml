@@ -1,0 +1,23 @@
+sudo: required
+language: java
+
+jdk:
+  - openjdk8
+
+cache:
+  directories:
+    - "$HOME/.m2"
+
+before_install:
+  - chmod +x ./mvnw
+
+install: true
+
+script: "cp .travis.settings.xml $HOME/.m2/settings.xml && ./mvnw clean package"
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: "./mvnw deploy"
+    on:
+      branch: master
