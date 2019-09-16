@@ -17,6 +17,29 @@
     </modules>
 
 
+    <repositories>
+        <repository>
+            <id>packagecloud</id>
+            <url>https://packagecloud.io/priv/${env.PACKAGECLOUD_TOKEN}/500px/microservice/maven2</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>packagecloud-500px</id>
+            <url>packagecloud+https://packagecloud.io/500px/microservice</url>
+        </repository>
+        <snapshotRepository>
+            <id>packagecloud-500px</id>
+            <url>packagecloud+https://packagecloud.io/500px/microservice</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 
 </project>

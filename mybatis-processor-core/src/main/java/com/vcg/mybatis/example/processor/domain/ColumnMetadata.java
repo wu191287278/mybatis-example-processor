@@ -61,9 +61,8 @@ public class ColumnMetadata {
     }
 
     public ColumnMetadata setJavaType(String javaType) {
-        String[] split = javaType.split("\\s+");
-        this.javaType = split[split.length - 1];
-        this.stringType = "java.lang.String".equals(this.javaType);
+        this.javaType = javaType;
+        this.stringType = "java.lang.String".equals(javaType);
         return this;
     }
 
