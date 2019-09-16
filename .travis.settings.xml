@@ -4,7 +4,7 @@
     <servers>
         <server>
             <id>packagecloud-500px</id>
-            <password>${env.PACKAGECLOUD_DEPLOY_TOKEN}</password>
+            <password>cfc2bc8271310ccabcf7e9ac156b5c80c0c024ea4db6b7b6</password>
         </server>
     </servers>
 </settings>
