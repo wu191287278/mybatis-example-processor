@@ -16,6 +16,10 @@
         <module>mybatis-processor-starter</module>
     </modules>
 
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
     <build>
         <extensions>
             <extension>
