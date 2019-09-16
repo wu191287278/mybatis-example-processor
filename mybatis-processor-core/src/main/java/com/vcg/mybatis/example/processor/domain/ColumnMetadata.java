@@ -61,7 +61,8 @@ public class ColumnMetadata {
     }
 
     public ColumnMetadata setJavaType(String javaType) {
-        this.javaType = javaType.replaceAll("@.+? ","");
+        String[] split = javaType.split("\\s+");
+        this.javaType = split[split.length - 1];
         this.stringType = "java.lang.String".equals(this.javaType);
         return this;
     }
@@ -119,8 +120,4 @@ public class ColumnMetadata {
         return this;
     }
 
-    public static void main(String[] args) {
-        String str = "@javax.validation.constraints.NotNull,@javax.validation.constraints.NotNull java.lang.String";
-        System.err.println(str.replaceAll("@.+? ",""));
-    }
 }
