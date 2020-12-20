@@ -200,6 +200,16 @@
   {{/metadata.primaryMetadata}}
 
   {{#metadata.primaryMetadata}}
+  <select id="selectByPrimaryKeyForUpdate" parameterType="{{metadata.primaryMetadata.javaType}}" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from {{metadata.tableName}}
+    where {{metadata.primaryMetadata.columnName}} = #{ {{metadata.primaryMetadata.fieldName}} }
+    for update
+  </select>
+  {{/metadata.primaryMetadata}}
+
+  {{#metadata.primaryMetadata}}
   <delete id="deleteByPrimaryKey" parameterType="{{metadata.primaryMetadata.javaType}}">
     delete from {{metadata.tableName}}
     where {{metadata.primaryMetadata.columnName}} = #{ {{metadata.primaryMetadata.fieldName}} }

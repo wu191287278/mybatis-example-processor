@@ -11,6 +11,8 @@ public interface MybatisExampleRepository<T, ID, Example> {
 
     T selectByPrimaryKey(ID id);
 
+    T selectByPrimaryKeyForUpdate(ID id);
+
     List<T> selectByPrimaryKeys(List<ID> ids);
 
     List<T> selectByExample(Example query);

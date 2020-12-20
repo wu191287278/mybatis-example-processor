@@ -16,6 +16,10 @@ public class BaseService<T, ID, Example> {
         return repository.selectByPrimaryKey(id);
     }
 
+    public T selectByPrimaryKeyForUpdate(ID id) {
+        return repository.selectByPrimaryKeyForUpdate(id);
+    }
+
     public List<T> selectByPrimaryKeys(List<ID> ids) {
         return repository.selectByPrimaryKeys(ids);
     }

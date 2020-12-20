@@ -3,11 +3,14 @@ package com.vcg.mybatis.example.starter;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.annotation.Order;
 
 import java.util.List;
 
+@Order(0)
 public class JqlConfiguration implements BeanPostProcessor {
 
     @Override
