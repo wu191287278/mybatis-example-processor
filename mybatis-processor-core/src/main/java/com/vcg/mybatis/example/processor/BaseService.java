@@ -6,7 +6,7 @@ import java.util.List;
 
 public class BaseService<T, ID, Example> {
 
-    private MybatisExampleRepository<T, ID, Example> repository;
+    private final MybatisExampleRepository<T, ID, Example> repository;
 
     public BaseService(MybatisExampleRepository<T, ID, Example> repository) {
         this.repository = repository;
@@ -80,4 +80,18 @@ public class BaseService<T, ID, Example> {
         return this.repository.deleteByExample(q);
     }
 
+
+    public void replaceByPrimaryKey(T t) {
+        int affect = updateByPrimaryKey(t);
+        if (affect == 0) {
+            insert(t);
+        }
+    }
+
+    public void replaceByPrimaryKeySelective(T t) {
+        int affect = updateByPrimaryKeySelective(t);
+        if (affect == 0) {
+            insertSelective(t);
+        }
+    }
 }

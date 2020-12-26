@@ -1,15 +1,24 @@
 package com.vcg.mybatis.example.processor;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.vcg.mybatis.example.processor.domain.ColumnMetadata;
 import com.vcg.mybatis.example.processor.domain.JoinMetadata;
 import com.vcg.mybatis.example.processor.domain.TableMetadata;
-import com.vcg.mybatis.example.processor.handler.Separator;
 import com.vcg.mybatis.example.processor.util.CamelUtils;
 import com.vcg.mybatis.example.processor.visitor.DomainTypeVisitor;
-
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.RoundEnvironment;
@@ -24,16 +33,6 @@ import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @SupportedAnnotationTypes("com.vcg.mybatis.example.processor.Example")
 public class MybatisDomainProcessor extends AbstractProcessor {
@@ -159,7 +158,6 @@ public class MybatisDomainProcessor extends AbstractProcessor {
             Id id = member.getAnnotation(Id.class);
             Column column = member.getAnnotation(Column.class);
             GeneratedValue generatedValue = member.getAnnotation(GeneratedValue.class);
-            Separator typeHandler = member.getAnnotation(Separator.class);
             ColumnMetadata columnMetadata = new ColumnMetadata();
             member.asType().accept(domainTypeVisitor, columnMetadata);
             columnMetadata.setFieldName(name)
@@ -191,13 +189,7 @@ public class MybatisDomainProcessor extends AbstractProcessor {
 
             }
 
-            if (typeHandler != null && !"".equals(typeHandler.typeHandler())) {
-                columnMetadata.setTypeHandler(typeHandler.typeHandler());
-            }
-
-
             tableMetadata.getColumnMetadataList().add(columnMetadata);
-
         }
 
         String columns = tableMetadata.getColumnMetadataList()

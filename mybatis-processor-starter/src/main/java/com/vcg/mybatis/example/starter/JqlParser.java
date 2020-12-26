@@ -1,26 +1,8 @@
 package com.vcg.mybatis.example.starter;
 
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheFactory;
-import com.vcg.mybatis.example.processor.MybatisExampleRepository;
-import com.vcg.mybatis.example.processor.domain.ColumnMetadata;
-import com.vcg.mybatis.example.processor.domain.JoinMetadata;
-import com.vcg.mybatis.example.processor.domain.TableMetadata;
-import com.vcg.mybatis.example.processor.handler.PlaceHolderTypeHandler;
-import com.vcg.mybatis.example.processor.handler.Separator;
-import com.vcg.mybatis.example.processor.util.CamelUtils;
-import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.builder.xml.XMLMapperBuilder;
-import org.apache.ibatis.mapping.ResultMap;
-import org.apache.ibatis.mapping.ResultMapping;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.parser.PartTree;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
-import javax.persistence.*;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -29,6 +11,20 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
+import com.vcg.mybatis.example.processor.domain.ColumnMetadata;
+import com.vcg.mybatis.example.processor.domain.JoinMetadata;
+import com.vcg.mybatis.example.processor.domain.TableMetadata;
+import com.vcg.mybatis.example.processor.util.CamelUtils;
+import javax.persistence.*;
+import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.builder.xml.XMLMapperBuilder;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSessionFactory;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 public class JqlParser {
 
@@ -159,20 +155,6 @@ public class JqlParser {
                 throw new RuntimeException(e.getMessage(), e);
             }
         }
-        Collection<String> resultMapNames = configuration.getResultMapNames();
-        String baseResultMapName = mapperInterface.getName() + ".BaseResultMap";
-        String jqlBaseResultMapName = mapperInterface.getName() + ".JqlBaseResultMap";
-
-        if (resultMapNames.contains(baseResultMapName)) {
-            ResultMap baseResultMap = configuration.getResultMap(baseResultMapName);
-            registerTypeHandler(baseResultMap);
-        }
-
-        if (resultMapNames.contains(jqlBaseResultMapName)) {
-            ResultMap jqlResultMap = configuration.getResultMap(mapperInterface.getName() + ".JqlBaseResultMap");
-            registerTypeHandler(jqlResultMap);
-        }
-
     }
 
     private static Map<String, String> getColumns(Class domainClass) {
@@ -275,7 +257,6 @@ public class JqlParser {
             Id id = member.getAnnotation(Id.class);
             Column column = member.getAnnotation(Column.class);
             GeneratedValue generatedValue = member.getAnnotation(GeneratedValue.class);
-            Separator typeHandler = member.getAnnotation(Separator.class);
             ColumnMetadata columnMetadata = new ColumnMetadata();
             columnMetadata.setFieldName(name)
                     .setJavaType(member.getType().getName())
@@ -300,12 +281,6 @@ public class JqlParser {
                 tableMetadata.setPrimaryMetadata(columnMetadata);
             }
 
-
-            if (typeHandler != null && !"".equals(typeHandler.typeHandler())) {
-                columnMetadata.setTypeHandler(typeHandler.typeHandler());
-            }
-
-
             tableMetadata.getColumnMetadataList().add(columnMetadata);
 
         }
@@ -318,39 +293,6 @@ public class JqlParser {
         return tableMetadata.setColumns(columns);
     }
 
-    private static void registerTypeHandler(ResultMap resultMap) {
-        if (resultMap != null) {
-            Class<?> type = resultMap.getType();
-            List<ResultMapping> resultMappings = resultMap.getResultMappings();
-            for (ResultMapping resultMapping : resultMappings) {
-                String property = resultMapping.getProperty();
-                if (resultMapping.getTypeHandler() != null && resultMapping.getTypeHandler() instanceof PlaceHolderTypeHandler) {
-                    try {
-                        Field field = getField(type, property);
-                        Field handler = resultMapping.getClass().getDeclaredField("typeHandler");
-                        handler.setAccessible(true);
-                        handler.set(resultMapping, new GenericSeparatorTypeHandler(field));
-                    } catch (NoSuchFieldException | IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                }
-            }
-        }
-    }
-
-    private static Field getField(Class clazz, String name) throws NoSuchFieldException {
-        Class parentClass = clazz;
-        while (parentClass != null) {
-            for (Field field : clazz.getDeclaredFields()) {
-                if (field.getName().equals(name)) {
-                    return field;
-                }
-            }
-            parentClass = clazz.getSuperclass();
-        }
-        throw new NoSuchFieldException();
-    }
 
     private static final Map<String, String> JDBC_TYPE_MAPPING = new HashMap<>();
 

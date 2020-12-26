@@ -7,6 +7,9 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 public @interface Example {
 
+    /**
+     * 命名空间.
+     */
     String namespace();
 
     /**
@@ -18,7 +21,6 @@ public @interface Example {
      * 分片数量
      */
     int shard() default 0;
-
 
 
 }

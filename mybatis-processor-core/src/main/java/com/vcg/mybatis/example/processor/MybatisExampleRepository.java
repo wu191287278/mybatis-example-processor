@@ -5,7 +5,6 @@ import org.apache.ibatis.cursor.Cursor;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public interface MybatisExampleRepository<T, ID, Example> {
 
