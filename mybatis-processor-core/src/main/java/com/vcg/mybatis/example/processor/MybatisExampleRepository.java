@@ -34,12 +34,6 @@ public interface MybatisExampleRepository<T, ID, Example> {
 
     void insertBatch(List<T> ts);
 
-    void insertByExample(Example query);
-
-    void insertSelectiveByExample(Example query);
-
-    void insertBatchByExample(Example query);
-
     long countByExample(Example query);
 
     long count();
