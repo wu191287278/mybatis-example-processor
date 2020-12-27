@@ -1,14 +1,20 @@
 package com.vcg.mybatis.example.starter;
 
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSessionFactory;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.annotation.Order;
 
+import java.lang.reflect.Field;
 import java.util.List;
+
+import com.vcg.mybatis.example.processor.handler.NumberEnum;
+import com.vcg.mybatis.example.processor.handler.NumberEnumHandler;
+import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.mapping.ResultMapping;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.TypeHandler;
 
 @Order(0)
 public class JqlConfiguration implements BeanPostProcessor {
@@ -31,6 +37,12 @@ public class JqlConfiguration implements BeanPostProcessor {
                     configuration.addInterceptor(new PersistenceInterceptor());
                 }
             }
+            Configuration configuration = sqlSessionFactory.getConfiguration();
+            for (Object resultMap : configuration.getResultMaps()) {
+                if (resultMap instanceof ResultMap) {
+                    registerTypeHandler((ResultMap) resultMap);
+                }
+            }
         }
         return bean;
     }
@@ -38,5 +50,21 @@ public class JqlConfiguration implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         return bean;
+    }
+
+    private static void registerTypeHandler(ResultMap resultMap) {
+        List<ResultMapping> resultMappings = resultMap.getResultMappings();
+        for (ResultMapping resultMapping : resultMappings) {
+            Class<?> javaType = resultMapping.getJavaType();
+            if (NumberEnum.class.isAssignableFrom(javaType)) {
+                try {
+                    Field handler = resultMapping.getClass().getDeclaredField("typeHandler");
+                    handler.setAccessible(true);
+                    handler.set(resultMapping, new NumberEnumHandler(javaType));
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 }

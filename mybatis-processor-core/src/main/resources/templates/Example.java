@@ -7,7 +7,7 @@ import {{metadata.domainClazzName}};
 
 public class {{metadata.exampleClazzSimpleName}} implements Serializable {
 
-    private static final long serialVersionUID = {{metadata.randomId}}L;
+    private static final long serialVersionUID = 1000000L;
 
     public static final String TABLE_NAME = "{{metadata.tableName}}";
 
@@ -32,19 +32,6 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
     private static final String ASC = " ASC";
 
     private String table = TABLE_NAME;
-
-    {{#metadata.partitionKey}}
-    private static final String partitionKey = "{{fieldName}}";
-
-    private static final Integer shard = {{metadata.shard}};
-
-    private static final List<String> shardTables = getShardTables();
-
-    {{/metadata.partitionKey}}
-    private {{metadata.domainClazzSimpleName}} record;
-
-    private List<{{metadata.domainClazzSimpleName}}> records;
-
 
     public {{metadata.exampleClazzSimpleName}}() {}
 
@@ -128,24 +115,6 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
         return this;
     }
 
-    public {{metadata.domainClazzSimpleName}} getRecord() {
-        return this.record;
-    }
-
-    public List<{{metadata.domainClazzSimpleName}}> getRecords() {
-        return this.records;
-    }
-
-    public {{metadata.exampleClazzSimpleName}} record({{metadata.domainClazzSimpleName}} record) {
-        this.record = record;
-        return this;
-    }
-
-    public {{metadata.exampleClazzSimpleName}} records(List<{{metadata.domainClazzSimpleName}}> records) {
-        this.records = records;
-        return this;
-    }
-
     public String getTable() {
         return this.table;
     }
@@ -160,15 +129,6 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
             throw new RuntimeException("criteria for condition cannot be null");
         }
     }
-
-    private void checkTable(){
-        {{#metadata.partitionKey}}
-        if(table == null){
-            throw new RuntimeException("{{fieldName}} must have a value");
-        }
-        {{/metadata.partitionKey}}
-    }
-
 
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
@@ -243,132 +203,67 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
     }
 
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}EqualTo({{javaType}} {{fieldName}}) {
-        {{#partitionKey}}
-        shardTable({{fieldName}});
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}EqualTo({{fieldName}});
         return this;
     }
 
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}NotEqualTo({{javaType}} {{fieldName}}) {
-        {{#partitionKey}}
-        shardTable({{fieldName}});
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}NotEqualTo({{fieldName}});
         return this;
     }
 
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}In(List<{{javaType}}> {{fieldName}}) {
-        {{#partitionKey}}
-        if(!{{fieldName}}.isEmpty()){
-            shardTable({{fieldName}}.get(0));
-        }
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}In({{fieldName}});
         return this;
     }
 
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}NotIn(List<{{javaType}}> {{fieldName}}) {
-        {{#partitionKey}}
-        if(!{{fieldName}}.isEmpty()){
-            shardTable({{fieldName}}.get(0));
-        }
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}NotIn({{fieldName}});
         return this;
     }
 
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}Between({{javaType}} {{fieldName}}1, {{javaType}} {{fieldName}}2) {
-        {{#partitionKey}}
-        shardTable({{fieldName}}1);
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}Between({{fieldName}}1, {{fieldName}}2);
         return this;
     }
 
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}NotBetween({{javaType}} {{fieldName}}1, {{javaType}} {{fieldName}}2) {
-        {{#partitionKey}}
-        shardTable({{fieldName}}1);
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}NotBetween({{fieldName}}1, {{fieldName}}2);
         return this;
     }
 
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}GreaterThan({{javaType}} {{fieldName}}) {
-        {{#partitionKey}}
-        shardTable({{fieldName}});
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}GreaterThan({{fieldName}});
         return this;
     }
 
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}GreaterThanOrEqualTo({{javaType}} {{fieldName}}) {
-        {{#partitionKey}}
-        shardTable({{fieldName}});
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}GreaterThanOrEqualTo({{fieldName}});
         return this;
     }
 
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}LessThan({{javaType}} {{fieldName}}) {
-        {{#partitionKey}}
-        shardTable({{fieldName}});
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}LessThan({{fieldName}});
         return this;
     }
 
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}LessThanOrEqualTo({{javaType}} {{fieldName}}) {
-        {{#partitionKey}}
-        shardTable({{fieldName}});
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}LessThanOrEqualTo({{fieldName}});
         return this;
     }
 
     {{#stringType}}
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}Like({{javaType}} {{fieldName}}) {
-        {{#partitionKey}}
-        shardTable({{fieldName}});
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}Like({{fieldName}});
         return this;
     }
 
     public {{metadata.exampleClazzSimpleName}} and{{firstUpFieldName}}NotLike({{javaType}} {{fieldName}}) {
-        {{#partitionKey}}
-        shardTable({{fieldName}});
-        {{/partitionKey}}
         getCriteria().and{{firstUpFieldName}}NotLike({{fieldName}});
         return this;
     }
     {{/stringType}}
 {{/metadata.columnMetadataList}}
-
-    {{#metadata.partitionKey}}
-    protected void shardTable(Integer value){
-        if(value==null){
-            throw new RuntimeException("value for "+partitionKey+ "cannot be null");
-        }
-        this.table = shardTables.get(value.intValue() % this.shard);
-    }
-
-    protected void shardTable(Long value){
-        if(value==null){
-            throw new RuntimeException("value for "+partitionKey+" cannot be null");
-        }
-        this.table = shardTables.get((int)value.longValue() % this.shard);
-    }
-
-    protected void shardTable(String value){
-        if(value==null){
-            throw new RuntimeException("value for "+partitionKey+" cannot be null");
-        }
-        int slot = com.vcg.mybatis.example.processor.util.Crc16Utils.getSlot(value);
-        this.table = shardTables.get(slot % this.shard);
-    }
-    {{/metadata.partitionKey}}
-
 
     private Criteria getCriteria(){
         if(this.currentCriteria == null){
@@ -380,24 +275,24 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
 
     protected abstract static class GeneratedCriteria implements Serializable {
 
-        private static final long serialVersionUID = {{metadata.randomId}}L;
+        private static final long serialVersionUID = 1000001L;
 
-        protected Set<Criterion> criteria;
+        protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
             super();
-            criteria = new LinkedHashSet<Criterion>();
+            criteria = new ArrayList<Criterion>();
         }
 
         public boolean isValid() {
             return criteria.size() > 0;
         }
 
-        public Set<Criterion> getAllCriteria() {
+        public List<Criterion> getAllCriteria() {
             return criteria;
         }
 
-        public Set<Criterion> getCriteria() {
+        public List<Criterion> getCriteria() {
             return criteria;
         }
 
@@ -499,7 +394,7 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
 
     public static class Criteria extends GeneratedCriteria implements Serializable {
 
-        private static final long serialVersionUID = {{metadata.randomId}}L;
+        private static final long serialVersionUID = 1000002L;
 
 
         protected Criteria() {
@@ -509,7 +404,7 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
 
     public static class Criterion implements Serializable {
 
-        private static final long serialVersionUID = {{metadata.randomId}}L;
+        private static final long serialVersionUID = 1000003L;
 
         private String condition;
 
@@ -595,21 +490,10 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
             this(condition, value, secondValue, null);
         }
 
-        @Override
-        public int hashCode() {
-            return condition.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return condition.hashCode()==obj.hashCode();
-        }
-
     }
 
 
     public static interface Column {
-
         {{#metadata.columnMetadataList}}
         public static final String {{fieldName}} = "{{columnName}}";
         {{/metadata.columnMetadataList}}
@@ -622,17 +506,6 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
         {{/metadata.columnMetadataList}}
         return columns;
     }
-
-    {{#metadata.partitionKey}}
-    protected static List<String> getShardTables(){
-        List<String> tables = new ArrayList<String>();
-        {{#metadata.shardTables}}
-        tables.add("{{.}}");
-        {{/metadata.shardTables}}
-        return tables;
-    }
-    {{/metadata.partitionKey}}
-
 
     public List<Integer> getLimit(){
         return this.limit;

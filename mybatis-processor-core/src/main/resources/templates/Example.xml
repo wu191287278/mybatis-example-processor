@@ -311,49 +311,6 @@
     </trim>
     </foreach>
   </insert>
-  <insert id="insertByExample" parameterType="{{metadata.exampleClazzName}}" {{#metadata.primaryMetadata}} {{#metadata.primaryMetadata.useGeneratedKeys}} keyProperty="record.{{metadata.primaryMetadata.fieldName}}" useGeneratedKeys="{{metadata.primaryMetadata.useGeneratedKeys}}" {{/metadata.primaryMetadata.useGeneratedKeys}} {{/metadata.primaryMetadata}}>
-    insert into <include refid="Table_Name_Dy"></include> ({{metadata.columns}})
-    values (
-      <trim  suffixOverrides=",">
-      {{#metadata.columnMetadataList}}
-      #{ record.{{fieldName}} } ,
-      {{/metadata.columnMetadataList}}
-      </trim>
-        )
-  </insert>
-
-  <insert id="insertSelectiveByExample" parameterType="{{metadata.exampleClazzName}}" {{#metadata.primaryMetadata}} {{#metadata.primaryMetadata.useGeneratedKeys}} keyProperty="record.{{metadata.primaryMetadata.fieldName}}" useGeneratedKeys="{{metadata.primaryMetadata.useGeneratedKeys}}" {{/metadata.primaryMetadata.useGeneratedKeys}} {{/metadata.primaryMetadata}}>
-    insert into <include refid="Table_Name_Dy"></include>
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-    {{#metadata.columnMetadataList}}
-    <if test="record.{{fieldName}} != null">
-      {{columnName}},
-    </if>
-    {{/metadata.columnMetadataList}}
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-    {{#metadata.columnMetadataList}}
-    <if test="record.{{fieldName}} != null">
-      #{ record.{{fieldName}} } ,
-    </if>
-    {{/metadata.columnMetadataList}}
-    </trim>
-  </insert>
-
-
-  <insert id="insertBatchByExample" parameterType="{{metadata.exampleClazzName}}" {{#metadata.primaryMetadata}} {{#metadata.primaryMetadata.useGeneratedKeys}} keyProperty="{{metadata.primaryMetadata.fieldName}}" useGeneratedKeys="{{metadata.primaryMetadata.useGeneratedKeys}}" {{/metadata.primaryMetadata.useGeneratedKeys}} {{/metadata.primaryMetadata}}>
-            insert into <include refid="Table_Name_Dy"></include>(
-    <include refid="Base_Column_List" />
-            )
-            values
-    <foreach collection="records" index="index" item="item" separator=",">
-      <trim prefix="(" suffix=")" suffixOverrides=",">
-        {{#metadata.columnMetadataList}}
-        #{ item.{{fieldName}} },
-        {{/metadata.columnMetadataList}}
-      </trim>
-    </foreach>
-  </insert>
 
   <select id="countByExample" parameterType="{{metadata.exampleClazzName}}" resultType="long">
     select count(*) from <include refid="Table_Name_Dy"></include>

@@ -290,6 +290,7 @@ public class JqlParser {
                 .map(ColumnMetadata::getColumnName)
                 .collect(Collectors.joining(", "));
 
+
         return tableMetadata.setColumns(columns);
     }
 

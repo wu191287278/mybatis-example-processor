@@ -96,7 +96,6 @@ public class MybatisDomainProcessor extends AbstractProcessor {
         Example example = element.getAnnotation(Example.class);
         Table table = element.getAnnotation(Table.class);
         PackageElement packageOf = processingEnv.getElementUtils().getPackageOf(element);
-
         String clazzName = element.toString();
 
         String exampleName = (clazzName + "Example");
@@ -188,6 +187,7 @@ public class MybatisDomainProcessor extends AbstractProcessor {
                         .setShard(example.shard());
 
             }
+
 
             tableMetadata.getColumnMetadataList().add(columnMetadata);
         }
