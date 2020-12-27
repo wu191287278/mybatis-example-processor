@@ -4,19 +4,26 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
 public class NumberEnumHandler<E extends Enum> extends BaseTypeHandler<NumberEnum> {
 
-    private Class<NumberEnum<E>> type;
+    private final Class<NumberEnum<E>> type;
+
+    private final Map<Long, NumberEnum<E>> m = new HashMap<>();
 
     public NumberEnumHandler(Class<NumberEnum<E>> type) {
         if (type == null) {
             throw new IllegalArgumentException("Type argument cannot be null");
         }
         this.type = type;
+        for (NumberEnum<E> e : type.getEnumConstants()) {
+            m.put(e.getNumberValue().longValue(), e);
+        }
     }
 
     @Override
@@ -53,11 +60,10 @@ public class NumberEnumHandler<E extends Enum> extends BaseTypeHandler<NumberEnu
     }
 
     private NumberEnum findEnum(long value) {
-        for (NumberEnum constant : type.getEnumConstants()) {
-            if (constant.getNumberValue().longValue() == value) {
-                return constant;
-            }
+        NumberEnum<E> numberEnum = m.get(value);
+        if (numberEnum == null) {
+            throw new IllegalArgumentException("UnSupport enum type: " + value);
         }
-        throw new IllegalArgumentException("UnSupport enum type: " + value);
+        return numberEnum;
     }
 }
