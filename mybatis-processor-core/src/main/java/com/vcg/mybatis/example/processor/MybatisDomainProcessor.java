@@ -17,6 +17,7 @@ import com.github.mustachejava.MustacheFactory;
 import com.vcg.mybatis.example.processor.domain.ColumnMetadata;
 import com.vcg.mybatis.example.processor.domain.JoinMetadata;
 import com.vcg.mybatis.example.processor.domain.TableMetadata;
+import com.vcg.mybatis.example.processor.handler.TypeHandlerConverter;
 import com.vcg.mybatis.example.processor.util.CamelUtils;
 import com.vcg.mybatis.example.processor.visitor.DomainTypeVisitor;
 import javax.annotation.processing.AbstractProcessor;
@@ -33,6 +34,7 @@ import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
+import org.apache.ibatis.type.TypeHandler;
 
 @SupportedAnnotationTypes("com.vcg.mybatis.example.processor.Example")
 public class MybatisDomainProcessor extends AbstractProcessor {
@@ -188,6 +190,11 @@ public class MybatisDomainProcessor extends AbstractProcessor {
 
             }
 
+            TypeHandlerConverter annotation = member.getAnnotation(TypeHandlerConverter.class);
+            if (annotation != null && TypeHandler.class.isAssignableFrom(annotation.value())) {
+                String typeHandler = annotation.value().getName();
+                columnMetadata.setTypeHandler(typeHandler);
+            }
 
             tableMetadata.getColumnMetadataList().add(columnMetadata);
         }

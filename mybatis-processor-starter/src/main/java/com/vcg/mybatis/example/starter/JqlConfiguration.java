@@ -8,13 +8,12 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import com.vcg.mybatis.example.processor.handler.NumberEnum;
-import com.vcg.mybatis.example.processor.handler.NumberEnumHandler;
+import com.vcg.mybatis.example.processor.handler.NumberEnumTypeHandler;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.type.TypeHandler;
 
 @Order(0)
 public class JqlConfiguration implements BeanPostProcessor {
@@ -60,7 +59,7 @@ public class JqlConfiguration implements BeanPostProcessor {
                 try {
                     Field handler = resultMapping.getClass().getDeclaredField("typeHandler");
                     handler.setAccessible(true);
-                    handler.set(resultMapping, new NumberEnumHandler(javaType));
+                    handler.set(resultMapping, new NumberEnumTypeHandler(javaType));
                 } catch (NoSuchFieldException | IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }

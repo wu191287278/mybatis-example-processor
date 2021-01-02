@@ -10,13 +10,13 @@ import java.util.Map;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
-public class NumberEnumHandler<E extends Enum> extends BaseTypeHandler<NumberEnum> {
+public class NumberEnumTypeHandler<E extends Enum> extends BaseTypeHandler<NumberEnum> {
 
     private final Class<NumberEnum<E>> type;
 
     private final Map<Long, NumberEnum<E>> m = new HashMap<>();
 
-    public NumberEnumHandler(Class<NumberEnum<E>> type) {
+    public NumberEnumTypeHandler(Class<NumberEnum<E>> type) {
         if (type == null) {
             throw new IllegalArgumentException("Type argument cannot be null");
         }
