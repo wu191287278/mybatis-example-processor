@@ -17,7 +17,6 @@ import com.github.mustachejava.MustacheFactory;
 import com.vcg.mybatis.example.processor.domain.ColumnMetadata;
 import com.vcg.mybatis.example.processor.domain.JoinMetadata;
 import com.vcg.mybatis.example.processor.domain.TableMetadata;
-import com.vcg.mybatis.example.processor.handler.TypeHandlerConverter;
 import com.vcg.mybatis.example.processor.util.CamelUtils;
 import com.vcg.mybatis.example.processor.visitor.DomainTypeVisitor;
 import javax.annotation.processing.AbstractProcessor;
@@ -190,9 +189,9 @@ public class MybatisDomainProcessor extends AbstractProcessor {
 
             }
 
-            TypeHandlerConverter annotation = member.getAnnotation(TypeHandlerConverter.class);
-            if (annotation != null && TypeHandler.class.isAssignableFrom(annotation.value())) {
-                String typeHandler = annotation.value().getName();
+            Convert annotation = member.getAnnotation(Convert.class);
+            if (annotation != null && TypeHandler.class.isAssignableFrom(annotation.converter())) {
+                String typeHandler = annotation.converter().getName();
                 columnMetadata.setTypeHandler(typeHandler);
             }
 
