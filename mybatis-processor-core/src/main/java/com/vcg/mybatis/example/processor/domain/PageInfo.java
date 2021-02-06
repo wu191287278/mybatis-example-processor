@@ -17,6 +17,8 @@ public class PageInfo<T> implements Serializable {
 
     private List<T> data;
 
+    private PageInfo(){};
+
     public PageInfo(int page, int size, long total, List<T> data) {
         this.page = page;
         this.size = size;
