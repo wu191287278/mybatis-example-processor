@@ -36,6 +36,10 @@ public class BaseService<T, ID, Example> {
         return repository.selectByPrimaryKeys(ids);
     }
 
+    public List<T> selectByPrimaryKeysWithSorted(List<ID> ids) {
+        return repository.selectByPrimaryKeysWithSorted(ids, apply);
+    }
+
     public List<T> selectByExample(Example example) {
         return this.repository.selectByExample(example);
     }
@@ -108,12 +112,6 @@ public class BaseService<T, ID, Example> {
     }
 
     public Map<ID, T> mapById(List<ID> ids) {
-        if (apply == null) {
-            throw new IllegalArgumentException("Id convert can not be null!");
-        }
-        return repository.selectByPrimaryKeys(ids)
-                .stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.toMap(apply, Function.identity()));
+        return repository.mapById(ids, apply);
     }
 }

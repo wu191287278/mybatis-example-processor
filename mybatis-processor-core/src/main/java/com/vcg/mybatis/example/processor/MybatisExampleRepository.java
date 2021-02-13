@@ -5,6 +5,9 @@ import org.apache.ibatis.cursor.Cursor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public interface MybatisExampleRepository<T, ID, Example> {
 
@@ -55,5 +58,29 @@ public interface MybatisExampleRepository<T, ID, Example> {
     boolean existsById(ID id);
 
     boolean existsByExample(Example query);
+
+    default List<T> selectByPrimaryKeysWithSorted(List<ID> ids, Function<T, ID> apply) {
+        List<T> ts = selectByPrimaryKeys(ids);
+        if (apply != null && !ts.isEmpty()) {
+            Map<ID, T> m = ts.stream()
+                    .collect(Collectors.toMap(apply, Function.identity()));
+            return ids.stream()
+                    .map(m::get)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        }
+        return ts;
+    }
+
+
+    default Map<ID, T> mapById(List<ID> ids, Function<T, ID> apply) {
+        if (apply == null) {
+            throw new IllegalArgumentException("Id convert can not be null!");
+        }
+        return selectByPrimaryKeys(ids)
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(apply, Function.identity()));
+    }
 
 }
