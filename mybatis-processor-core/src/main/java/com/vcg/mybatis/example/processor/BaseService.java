@@ -2,14 +2,26 @@ package com.vcg.mybatis.example.processor;
 
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 public class BaseService<T, ID, Example> {
 
     private final MybatisExampleRepository<T, ID, Example> repository;
 
+    private final Function<T, ID> apply;
+
     public BaseService(MybatisExampleRepository<T, ID, Example> repository) {
         this.repository = repository;
+        this.apply = null;
+    }
+
+    public BaseService(MybatisExampleRepository<T, ID, Example> repository, Function<T, ID> apply) {
+        this.repository = repository;
+        this.apply = apply;
     }
 
     public T selectByPrimaryKey(ID id) {
@@ -93,5 +105,15 @@ public class BaseService<T, ID, Example> {
         if (affect == 0) {
             insertSelective(t);
         }
+    }
+
+    public Map<ID, T> mapById(List<ID> ids) {
+        if (apply == null) {
+            throw new IllegalArgumentException("Id convert can not be null!");
+        }
+        return repository.selectByPrimaryKeys(ids)
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(apply, Function.identity()));
     }
 }
