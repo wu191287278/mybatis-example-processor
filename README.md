@@ -76,6 +76,15 @@ mybatis:
     - classpath:com/example/domain/*ExampleMapper.xml
 ```
 
+3. 使用方式
+
+```
+CommentExample query = CommentExample.create()
+    .andUserIdEqualTo("1","2")
+    .page(1,10);
+List<Comment> comments = commentRepository.selectByExample(query);
+```
+
 3. mybatisConfig.xml 使用方式
 
 ```
