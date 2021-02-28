@@ -8,11 +8,9 @@ public class QueryMetadata {
 
     private String exampleClazzName;
 
-    private String converterClazzSimpleName;
-
-    private String convertClazzName;
-
     private String queryClazzName;
+
+    private String queryClazzSimpleName;
 
     private List<Criteria> criteria;
 
@@ -29,34 +27,16 @@ public class QueryMetadata {
         return this;
     }
 
-    public String getConverterClazzSimpleName() {
-        return converterClazzSimpleName;
-    }
-
-    public QueryMetadata setConverterClazzSimpleName(String converterClazzSimpleName) {
-        this.converterClazzSimpleName = converterClazzSimpleName;
-        return this;
-    }
-
-    public String getConvertClazzName() {
-        return convertClazzName;
-    }
-
-    public QueryMetadata setConvertClazzName(String convertClazzName) {
-        this.convertClazzName = convertClazzName;
-        if (convertClazzName != null) {
-            String[] split = convertClazzName.split("[.]");
-            this.converterClazzSimpleName = split[split.length - 1];
-        }
-        return this;
-    }
-
     public String getQueryClazzName() {
         return queryClazzName;
     }
 
     public QueryMetadata setQueryClazzName(String queryClazzName) {
         this.queryClazzName = queryClazzName;
+        if (queryClazzName != null) {
+            String[] split = queryClazzName.split("[.]");
+            this.queryClazzSimpleName = split[split.length - 1];
+        }
         return this;
     }
 
@@ -91,5 +71,13 @@ public class QueryMetadata {
 
     public void setPage(Boolean page) {
         this.page = page;
+    }
+
+    public String getQueryClazzSimpleName() {
+        return queryClazzSimpleName;
+    }
+
+    public void setQueryClazzSimpleName(String queryClazzSimpleName) {
+        this.queryClazzSimpleName = queryClazzSimpleName;
     }
 }

@@ -13,14 +13,8 @@ public @interface Example {
     String namespace();
 
     /**
-     * 分区键
+     * 是否生成query对象.
      */
-    String partitionKey() default "";
-
-    /**
-     * 分片数量
-     */
-    int shard() default 0;
-
+    boolean query() default false;
 
 }

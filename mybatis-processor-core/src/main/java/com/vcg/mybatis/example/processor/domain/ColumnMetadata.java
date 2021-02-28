@@ -22,6 +22,8 @@ public class ColumnMetadata {
 
     private String typeHandler;
 
+    private String javaDoc;
+
     public String getFieldName() {
         return fieldName;
     }
@@ -120,4 +122,15 @@ public class ColumnMetadata {
         return this;
     }
 
+    public String getJavaDoc() {
+        return javaDoc;
+    }
+
+    public ColumnMetadata setJavaDoc(String javaDoc) {
+        this.javaDoc = javaDoc;
+        if (javaDoc != null && javaDoc.length() > 1) {
+            this.javaDoc = javaDoc.substring(0, javaDoc.length() - 1);
+        }
+        return this;
+    }
 }

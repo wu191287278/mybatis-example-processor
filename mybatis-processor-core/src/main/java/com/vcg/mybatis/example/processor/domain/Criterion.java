@@ -12,6 +12,8 @@ public class Criterion {
 
     private String javaType;
 
+    private String javaDoc;
+
     private boolean like;
 
     private boolean notLike;
@@ -165,5 +167,18 @@ public class Criterion {
 
     public void setFirstUpFieldAliasName(String firstUpFieldAliasName) {
         this.firstUpFieldAliasName = firstUpFieldAliasName;
+    }
+
+    public String getJavaDoc() {
+        return javaDoc;
+    }
+
+    public Criterion setJavaDoc(String javaDoc) {
+
+        this.javaDoc = javaDoc;
+        if (javaDoc != null && javaDoc.length() > 1) {
+            this.javaDoc = javaDoc.substring(0, javaDoc.length() - 1);
+        }
+        return this;
     }
 }
