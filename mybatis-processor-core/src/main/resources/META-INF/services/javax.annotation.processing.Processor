@@ -1,1 +1,2 @@
 com.vcg.mybatis.example.processor.MybatisDomainProcessor
+com.vcg.mybatis.example.processor.ExampleQueryConverterProcessor

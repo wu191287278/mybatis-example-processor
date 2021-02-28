@@ -33,6 +33,8 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
 
     private String table = TABLE_NAME;
 
+    private static final Map<String,String> MAPPING = new HashMap<String,String>();
+
     public {{metadata.exampleClazzSimpleName}}() {}
 
     public static {{metadata.exampleClazzSimpleName}} create(){
@@ -49,6 +51,13 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
         return this;
     }
 
+    public {{metadata.exampleClazzSimpleName}} orderBy(String name,String sort) {
+        return orderByClause(MAPPING.get(name)+" "+sort);
+    }
+
+    public {{metadata.exampleClazzSimpleName}} orderBy(String name, boolean sort) {
+        return orderBy(name,sort?DESC:ASC);
+    }
 
     public {{metadata.exampleClazzSimpleName}} page(int page, int size) {
         if(page<=0 ||size <=0){
@@ -103,16 +112,12 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
         return this;
     }
 
-    public {{metadata.exampleClazzSimpleName}} asc(String... columns){
-        String orderBy = String.join(",",columns) + ASC;
-        orderByClause(this.orderByClause==null ? orderBy : (this.orderByClause +","+ orderBy));
-        return this;
+    public {{metadata.exampleClazzSimpleName}} asc(String column){
+        return orderBy(column,ASC);
     }
 
-    public {{metadata.exampleClazzSimpleName}} desc(String... columns){
-        String orderBy = String.join(",",columns) + DESC;
-        orderByClause(this.orderByClause==null ? orderBy : (this.orderByClause +","+ orderBy));
-        return this;
+    public {{metadata.exampleClazzSimpleName}} desc(String column){
+        return orderBy(column,DESC);
     }
 
     public String getTable() {
@@ -509,5 +514,14 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
 
     public List<Integer> getLimit(){
         return this.limit;
+    }
+
+
+
+    static {
+        {{#metadata.columnMetadataList}}
+        MAPPING.put("{{fieldName}}","{{columnName}}");
+        MAPPING.put("{{columnName}}","{{fieldName}}");
+        {{/metadata.columnMetadataList}}
     }
 }

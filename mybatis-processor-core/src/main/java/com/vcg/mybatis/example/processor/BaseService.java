@@ -7,6 +7,8 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.vcg.mybatis.example.processor.domain.PageInfo;
+
 
 public class BaseService<T, ID, Example> {
 
@@ -96,7 +98,6 @@ public class BaseService<T, ID, Example> {
         return this.repository.deleteByExample(q);
     }
 
-
     public void replaceByPrimaryKey(T t) {
         int affect = updateByPrimaryKey(t);
         if (affect == 0) {
@@ -113,5 +114,16 @@ public class BaseService<T, ID, Example> {
 
     public Map<ID, T> mapById(List<ID> ids) {
         return repository.mapById(ids, apply);
+    }
+
+    public PageInfo<T> pageByExample(int page, int size, Example q) {
+        List<T> ts = selectByExample(q);
+        long total = ts.size();
+        if (page == 1 && total < size) {
+            total = ts.size();
+        } else {
+            total = countByExample(q);
+        }
+        return new PageInfo<>(page, size, total, ts);
     }
 }
