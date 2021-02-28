@@ -28,7 +28,7 @@ import javax.persistence.Transient;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
-@SupportedAnnotationTypes("com.vcg.mybatis.example.processor.ExampleQuery")
+@SupportedAnnotationTypes("com.vcg.mybatis.example.processor.ExampleQueryConverter")
 public class ExampleQueryConverterProcessor extends AbstractProcessor {
 
     private final QueryTypeVisitor visitor = new QueryTypeVisitor();
