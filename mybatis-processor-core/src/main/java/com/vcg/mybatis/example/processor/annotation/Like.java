@@ -1,4 +1,4 @@
-package com.vcg.mybatis.example.processor.converter.annotation;
+package com.vcg.mybatis.example.processor.annotation;
 
 import java.lang.annotation.*;
 
