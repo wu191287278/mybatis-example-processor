@@ -9,7 +9,6 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.vcg.mybatis.example.processor.annotation.*;
-import com.vcg.mybatis.example.processor.converter.annotation.*;
 import com.vcg.mybatis.example.processor.domain.*;
 import com.vcg.mybatis.example.processor.util.CamelUtils;
 import com.vcg.mybatis.example.processor.visitor.DomainTypeVisitor;
