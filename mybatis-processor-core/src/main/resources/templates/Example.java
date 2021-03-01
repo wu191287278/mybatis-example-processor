@@ -521,7 +521,7 @@ public class {{metadata.exampleClazzSimpleName}} implements Serializable {
     static {
         {{#metadata.columnMetadataList}}
         MAPPING.put("{{fieldName}}","{{columnName}}");
-        MAPPING.put("{{columnName}}","{{fieldName}}");
+        MAPPING.put("{{columnName}}","{{columnName}}");
         {{/metadata.columnMetadataList}}
     }
 }
