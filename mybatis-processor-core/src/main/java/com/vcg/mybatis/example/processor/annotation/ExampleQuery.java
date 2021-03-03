@@ -10,6 +10,11 @@ public @interface ExampleQuery {
     boolean enable() default false;
 
     /**
+     * 全部字段.
+     */
+    boolean all() default false;
+
+    /**
      * 页码字段名.
      */
     String page() default "page";

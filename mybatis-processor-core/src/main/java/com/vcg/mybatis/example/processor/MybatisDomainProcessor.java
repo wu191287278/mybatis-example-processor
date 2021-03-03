@@ -257,33 +257,39 @@ public class MybatisDomainProcessor extends AbstractProcessor {
             CriterionMetadata criterionMetadata = new CriterionMetadata();
             criterionMetadata.setSingle(true);
             Criterion criterion = member.getAnnotation(Criterion.class);
-            if (criterion == null) {
+            if (criterion == null && !exampleQuery.all()) {
                 continue;
             }
-            criterionMetadata.setFieldName("".equals(criterion.value()) ? name : criterion.value());
-            if (criterion.equalTo()) {
-                criterionMetadata.setEqualTo(true);
-            } else if (criterion.notEqualTo()) {
-                criterionMetadata.setNotEqualTo(true);
-            } else if (criterion.greaterThan()) {
-                criterionMetadata.setGreaterThan(true);
-            } else if (criterion.greaterThanOrEqualTo()) {
-                criterionMetadata.setGreaterThanOrEqualTo(true);
-            } else if (criterion.in()) {
-                criterionMetadata.setIn(true);
-            } else if (criterion.notIn()) {
-                criterionMetadata.setNotIn(true);
-            } else if (criterion.lessThan()) {
-                criterionMetadata.setLessThan(true);
-            } else if (criterion.lessThanOrEqualTo()) {
-                criterionMetadata.setLessThanOrEqualTo(true);
-            } else if (criterion.like()) {
-                criterionMetadata.setLike(true);
-            } else if (criterion.notLike()) {
-                criterionMetadata.setNotLike(true);
-            } else if (criterion.between()) {
-                criterionMetadata.setBetween(true);
+            if (criterion != null) {
+                criterionMetadata.setFieldName("".equals(criterion.value()) ? name : criterion.value());
+                if (criterion.equalTo()) {
+                    criterionMetadata.setEqualTo(true);
+                } else if (criterion.notEqualTo()) {
+                    criterionMetadata.setNotEqualTo(true);
+                } else if (criterion.greaterThan()) {
+                    criterionMetadata.setGreaterThan(true);
+                } else if (criterion.greaterThanOrEqualTo()) {
+                    criterionMetadata.setGreaterThanOrEqualTo(true);
+                } else if (criterion.in()) {
+                    criterionMetadata.setIn(true);
+                } else if (criterion.notIn()) {
+                    criterionMetadata.setNotIn(true);
+                } else if (criterion.lessThan()) {
+                    criterionMetadata.setLessThan(true);
+                } else if (criterion.lessThanOrEqualTo()) {
+                    criterionMetadata.setLessThanOrEqualTo(true);
+                } else if (criterion.like()) {
+                    criterionMetadata.setLike(true);
+                } else if (criterion.notLike()) {
+                    criterionMetadata.setNotLike(true);
+                } else if (criterion.between()) {
+                    criterionMetadata.setBetween(true);
+                } else {
+                    criterionMetadata.setEqualTo(true);
+                }
             } else {
+                criterionMetadata.setFieldName(name);
+                criterionMetadata.setSingle(true);
                 criterionMetadata.setEqualTo(true);
             }
 
@@ -292,13 +298,14 @@ public class MybatisDomainProcessor extends AbstractProcessor {
             if (criterionMetadata.getFieldName() == null) {
                 continue;
             }
-
-            if (criterionMetadata.getJavaType().startsWith("java.util.List")) {
-                criterionMetadata.setIn(true);
+            String javaType = criterionMetadata.getJavaType();
+            if (javaType.equals("Date") || javaType.equals("java.util.Date")) {
+                criterionMetadata.setBetween(true);
             }
+
             String docComment = elementUtils.getDocComment(member);
 
-            if (criterion.or().length > 1) {
+            if (criterion != null && criterion.or().length > 1) {
                 CriteriaMetadata orCriteriaMetadata = new CriteriaMetadata();
                 orCriteriaMetadata.setOr(true);
                 for (String n : criterion.or()) {
