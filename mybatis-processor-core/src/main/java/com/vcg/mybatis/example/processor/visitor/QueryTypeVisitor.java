@@ -1,12 +1,12 @@
 package com.vcg.mybatis.example.processor.visitor;
 
-import com.vcg.mybatis.example.processor.domain.Criterion;
+import com.vcg.mybatis.example.processor.domain.CriterionMetadata;
 import javax.lang.model.type.*;
 
-public class QueryTypeVisitor implements TypeVisitor<QueryTypeVisitor, Criterion> {
+public class QueryTypeVisitor implements TypeVisitor<QueryTypeVisitor, CriterionMetadata> {
 
     @Override
-    public QueryTypeVisitor visit(TypeMirror t, Criterion c) {
+    public QueryTypeVisitor visit(TypeMirror t, CriterionMetadata c) {
         return this;
     }
 
@@ -16,66 +16,66 @@ public class QueryTypeVisitor implements TypeVisitor<QueryTypeVisitor, Criterion
     }
 
     @Override
-    public QueryTypeVisitor visitPrimitive(PrimitiveType t, Criterion c) {
+    public QueryTypeVisitor visitPrimitive(PrimitiveType t, CriterionMetadata c) {
         c.setJavaType(t.toString());
         return this;
     }
 
     @Override
-    public QueryTypeVisitor visitNull(NullType t, Criterion c) {
+    public QueryTypeVisitor visitNull(NullType t, CriterionMetadata c) {
         c.setJavaType(t.toString());
         return this;
     }
 
     @Override
-    public QueryTypeVisitor visitArray(ArrayType t, Criterion c) {
+    public QueryTypeVisitor visitArray(ArrayType t, CriterionMetadata c) {
         c.setJavaType(t.toString());
         return this;
     }
 
     @Override
-    public QueryTypeVisitor visitDeclared(DeclaredType t, Criterion c) {
+    public QueryTypeVisitor visitDeclared(DeclaredType t, CriterionMetadata c) {
         c.setJavaType(t.toString());
         return this;
     }
 
     @Override
-    public QueryTypeVisitor visitError(ErrorType t, Criterion c) {
+    public QueryTypeVisitor visitError(ErrorType t, CriterionMetadata c) {
         return this;
     }
 
     @Override
-    public QueryTypeVisitor visitTypeVariable(TypeVariable t, Criterion c) {
+    public QueryTypeVisitor visitTypeVariable(TypeVariable t, CriterionMetadata c) {
         return this;
     }
 
     @Override
-    public QueryTypeVisitor visitWildcard(WildcardType t, Criterion c) {
+    public QueryTypeVisitor visitWildcard(WildcardType t, CriterionMetadata c) {
         return this;
     }
 
     @Override
-    public QueryTypeVisitor visitExecutable(ExecutableType t, Criterion c) {
+    public QueryTypeVisitor visitExecutable(ExecutableType t, CriterionMetadata c) {
         return this;
     }
 
     @Override
-    public QueryTypeVisitor visitNoType(NoType t, Criterion c) {
+    public QueryTypeVisitor visitNoType(NoType t, CriterionMetadata c) {
         return this;
     }
 
     @Override
-    public QueryTypeVisitor visitUnknown(TypeMirror t, Criterion c) {
+    public QueryTypeVisitor visitUnknown(TypeMirror t, CriterionMetadata c) {
         return this;
     }
 
     @Override
-    public QueryTypeVisitor visitUnion(UnionType t, Criterion c) {
+    public QueryTypeVisitor visitUnion(UnionType t, CriterionMetadata c) {
         return this;
     }
 
     @Override
-    public QueryTypeVisitor visitIntersection(IntersectionType t, Criterion c) {
+    public QueryTypeVisitor visitIntersection(IntersectionType t, CriterionMetadata c) {
         return this;
     }
 }

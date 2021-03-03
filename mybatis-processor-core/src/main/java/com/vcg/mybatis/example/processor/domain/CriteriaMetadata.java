@@ -3,17 +3,17 @@ package com.vcg.mybatis.example.processor.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Criteria {
+public class CriteriaMetadata {
 
-    private List<Criterion> criteria = new ArrayList<>();
+    private List<CriterionMetadata> criteria = new ArrayList<>();
 
     private boolean or;
 
-    public List<Criterion> getCriteria() {
+    public List<CriterionMetadata> getCriteria() {
         return criteria;
     }
 
-    public void setCriteria(List<Criterion> criteria) {
+    public void setCriteria(List<CriterionMetadata> criteria) {
         this.criteria = criteria;
     }
 

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import com.vcg.mybatis.example.processor.annotation.ExampleQuery;
 import com.vcg.mybatis.example.processor.annotation.*;
 import com.vcg.mybatis.example.processor.domain.*;
 import com.vcg.mybatis.example.processor.util.CamelUtils;
@@ -79,9 +80,10 @@ public class MybatisDomainProcessor extends AbstractProcessor {
                         mustache.execute(writer, scopes);
                     }
 
-                    Example query = element.getAnnotation(Example.class);
+                    Example example = element.getAnnotation(Example.class);
 
-                    if (!query.query()) {
+                    ExampleQuery exampleQuery = example.query();
+                    if (!exampleQuery.enable()) {
                         continue;
                     }
                     QueryMetadata queryMetadata = readQueryMetadata(element);
@@ -228,7 +230,9 @@ public class MybatisDomainProcessor extends AbstractProcessor {
 
 
     public QueryMetadata readQueryMetadata(Element element) {
-        PackageElement packageOf = processingEnv.getElementUtils().getPackageOf(element);
+        Elements elementUtils = processingEnv.getElementUtils();
+
+        PackageElement packageOf = elementUtils.getPackageOf(element);
         String packageName = packageOf.toString();
         String clazzName = element.toString();
 
@@ -238,117 +242,81 @@ public class MybatisDomainProcessor extends AbstractProcessor {
                 .setQueryClazzName(queryName)
                 .setExampleClazzName(exampleName)
                 .setPackageName(packageName);
+        Example example = element.getAnnotation(Example.class);
+        ExampleQuery exampleQuery = example.query();
 
-        Criteria criteria = new Criteria();
-        List<Criteria> list = new ArrayList<>();
-        List<Criteria> orList = new ArrayList<>();
-        boolean page = false;
-        boolean size = false;
-        boolean orderBy = false;
-        boolean sort = false;
+        CriteriaMetadata criteriaMetadata = new CriteriaMetadata();
+        List<CriteriaMetadata> list = new ArrayList<>();
+        List<CriteriaMetadata> orList = new ArrayList<>();
         for (Element member : element.getEnclosedElements()) {
             if (member.getModifiers().contains(Modifier.STATIC) || !member.getKind().isField() ||
                     member.getAnnotation(Transient.class) != null) {
                 continue;
             }
             String name = member.toString();
-            if ("page".equals(name)) {
-                page = true;
+            CriterionMetadata criterionMetadata = new CriterionMetadata();
+            criterionMetadata.setSingle(true);
+            Criterion criterion = member.getAnnotation(Criterion.class);
+            if (criterion == null) {
                 continue;
             }
-            if ("size".equals(name)) {
-                size = true;
-                continue;
-            }
-            if ("orderBy".equals(name)) {
-                orderBy = true;
-                continue;
-            }
-            if ("sort".equals(name)) {
-                sort = true;
-                continue;
-            }
-            Criterion criterion = new Criterion();
-
-            EqualTo equalTo = member.getAnnotation(EqualTo.class);
-            if (equalTo != null) {
-                criterion.setEqualTo(true);
-                criterion.setFieldName("".equals(equalTo.value()) ? name : equalTo.value());
-            }
-            NotEqualTo notEqualTo = member.getAnnotation(NotEqualTo.class);
-            if (notEqualTo != null) {
-                criterion.setNotEqualTo(true);
-                criterion.setFieldName("".equals(notEqualTo.value()) ? name : notEqualTo.value());
-            }
-            GreaterThan greaterThan = member.getAnnotation(GreaterThan.class);
-            if (greaterThan != null) {
-                criterion.setGreaterThan(true);
-                criterion.setFieldName("".equals(greaterThan.value()) ? name : greaterThan.value());
-            }
-            GreaterThanOrEqualTo greaterThanOrEqualTo = member.getAnnotation(GreaterThanOrEqualTo.class);
-            if (greaterThanOrEqualTo != null) {
-                criterion.setGreaterThanOrEqualTo(true);
-                criterion.setFieldName("".equals(greaterThanOrEqualTo.value()) ? name : greaterThanOrEqualTo.value());
-            }
-            In in = member.getAnnotation(In.class);
-            if (in != null) {
-                criterion.setIn(true);
-                criterion.setFieldName("".equals(in.value()) ? name : in.value());
-            }
-            NotIn notIn = member.getAnnotation(NotIn.class);
-            if (notIn != null) {
-                criterion.setNotIn(true);
-                criterion.setFieldName("".equals(notIn.value()) ? name : notIn.value());
-            }
-            LessThan lessThan = member.getAnnotation(LessThan.class);
-            if (lessThan != null) {
-                criterion.setLessThan(true);
-                criterion.setFieldName("".equals(lessThan.value()) ? name : lessThan.value());
-            }
-            LessThanOrEqualTo lessThanOrEqualTo = member.getAnnotation(LessThanOrEqualTo.class);
-            if (lessThanOrEqualTo != null) {
-                criterion.setLessThanOrEqualTo(true);
-                criterion.setFieldName("".equals(lessThanOrEqualTo.value()) ? name : lessThanOrEqualTo.value());
-            }
-            Like like = member.getAnnotation(Like.class);
-            if (like != null) {
-                criterion.setLike(true);
-                criterion.setFieldName("".equals(like.value()) ? name : like.value());
-            }
-            NotLike notLike = member.getAnnotation(NotLike.class);
-            if (notLike != null) {
-                criterion.setNotLike(true);
-                criterion.setFieldName("".equals(notLike.value()) ? name : notLike.value());
+            criterionMetadata.setFieldName("".equals(criterion.value()) ? name : criterion.value());
+            if (criterion.equalTo()) {
+                criterionMetadata.setEqualTo(true);
+            } else if (criterion.notEqualTo()) {
+                criterionMetadata.setNotEqualTo(true);
+            } else if (criterion.greaterThan()) {
+                criterionMetadata.setGreaterThan(true);
+            } else if (criterion.greaterThanOrEqualTo()) {
+                criterionMetadata.setGreaterThanOrEqualTo(true);
+            } else if (criterion.in()) {
+                criterionMetadata.setIn(true);
+            } else if (criterion.notIn()) {
+                criterionMetadata.setNotIn(true);
+            } else if (criterion.lessThan()) {
+                criterionMetadata.setLessThan(true);
+            } else if (criterion.lessThanOrEqualTo()) {
+                criterionMetadata.setLessThanOrEqualTo(true);
+            } else if (criterion.like()) {
+                criterionMetadata.setLike(true);
+            } else if (criterion.notLike()) {
+                criterionMetadata.setNotLike(true);
+            } else if (criterion.between()) {
+                criterionMetadata.setBetween(true);
+            } else {
+                criterionMetadata.setEqualTo(true);
             }
 
-            member.asType().accept(queryTypeVisitor, criterion);
+            member.asType().accept(queryTypeVisitor, criterionMetadata);
 
-            if (criterion.getFieldName() == null) {
+            if (criterionMetadata.getFieldName() == null) {
                 continue;
             }
 
-            if (criterion.getJavaType().startsWith("java.util.List")) {
-                criterion.setIn(true);
+            if (criterionMetadata.getJavaType().startsWith("java.util.List")) {
+                criterionMetadata.setIn(true);
             }
+            String docComment = elementUtils.getDocComment(member);
 
-            Or or = member.getAnnotation(Or.class);
-            if (or != null) {
-                Criteria orCriteria = new Criteria();
-                orCriteria.setOr(true);
-                for (String n : or.value()) {
-                    Criterion c = copyCriteria(criterion);
+            if (criterion.or().length > 1) {
+                CriteriaMetadata orCriteriaMetadata = new CriteriaMetadata();
+                orCriteriaMetadata.setOr(true);
+                for (String n : criterion.or()) {
+                    CriterionMetadata c = copyCriteria(criterionMetadata);
                     c.setFieldAliasName(n);
-                    orCriteria.getCriteria().add(c);
+                    orCriteriaMetadata.getCriteria().add(c);
+                    c.setJavaDoc(docComment);
                 }
-                orList.add(orCriteria);
+                orList.add(orCriteriaMetadata);
                 continue;
             }
-            criterion.setFieldAliasName(name);
-            criteria.getCriteria().add(criterion);
+            criterionMetadata.setJavaDoc(docComment);
+            criterionMetadata.setFieldAliasName(name);
+            criteriaMetadata.getCriteria().add(criterionMetadata);
         }
 
-        if (criteria.getCriteria().size() > 0) {
-            list.add(criteria);
+        if (criteriaMetadata.getCriteria().size() > 0) {
+            list.add(criteriaMetadata);
         }
 
         list.addAll(orList);
@@ -358,28 +326,34 @@ public class MybatisDomainProcessor extends AbstractProcessor {
         }
 
         metadata.setCriteria(list);
-        metadata.setOrderBy(orderBy && sort);
-        metadata.setPage(page && size);
+        metadata.setPage(exampleQuery.page().equals("") ? null : exampleQuery.page());
+        metadata.setSize(exampleQuery.size().equals("") ? null : exampleQuery.size());
+        metadata.setOrderBy(exampleQuery.orderBy().equals("") ? null : exampleQuery.orderBy());
+        metadata.setSort(exampleQuery.sort().equals("") ? null : exampleQuery.sort());
+        metadata.setSizeDefault(exampleQuery.sizeDefault() == 0 ? null : exampleQuery.sizeDefault());
+        metadata.setPageDefault(exampleQuery.pageDefault() == 0 ? null : exampleQuery.pageDefault());
+        metadata.setOrderByDefault(exampleQuery.orderByDefault().equals("") ? null : exampleQuery.orderByDefault());
+        metadata.setSortDefault(exampleQuery.sortDefault().equals("") ? null : exampleQuery.sortDefault());
         return metadata;
     }
 
-    private Criterion copyCriteria(Criterion criterion) {
-        Criterion copy = new Criterion();
-        copy.setFirstUpFieldName(criterion.getFirstUpFieldName());
-        copy.setFieldName(criterion.getFieldName());
-        copy.setJavaType(criterion.getJavaType());
-        copy.setLike(criterion.isLike());
-        copy.setNotLike(criterion.isNotLike());
-        copy.setIn(criterion.isIn());
-        copy.setNotIn(criterion.isNotIn());
-        copy.setEqualTo(criterion.isEqualTo());
-        copy.setNotEqualTo(criterion.isNotEqualTo());
-        copy.setGreaterThan(criterion.isGreaterThan());
-        copy.setLessThan(criterion.isLessThan());
-        copy.setGreaterThanOrEqualTo(criterion.isGreaterThanOrEqualTo());
-        copy.setLessThanOrEqualTo(criterion.isLessThanOrEqualTo());
-        copy.setFieldAliasName(criterion.getFieldAliasName());
-        copy.setFirstUpFieldAliasName(criterion.getFirstUpFieldAliasName());
+    private CriterionMetadata copyCriteria(CriterionMetadata criterionMetadata) {
+        CriterionMetadata copy = new CriterionMetadata();
+        copy.setFirstUpFieldName(criterionMetadata.getFirstUpFieldName());
+        copy.setFieldName(criterionMetadata.getFieldName());
+        copy.setJavaType(criterionMetadata.getJavaType());
+        copy.setLike(criterionMetadata.isLike());
+        copy.setNotLike(criterionMetadata.isNotLike());
+        copy.setIn(criterionMetadata.isIn());
+        copy.setNotIn(criterionMetadata.isNotIn());
+        copy.setEqualTo(criterionMetadata.isEqualTo());
+        copy.setNotEqualTo(criterionMetadata.isNotEqualTo());
+        copy.setGreaterThan(criterionMetadata.isGreaterThan());
+        copy.setLessThan(criterionMetadata.isLessThan());
+        copy.setGreaterThanOrEqualTo(criterionMetadata.isGreaterThanOrEqualTo());
+        copy.setLessThanOrEqualTo(criterionMetadata.isLessThanOrEqualTo());
+        copy.setFieldAliasName(criterionMetadata.getFieldAliasName());
+        copy.setFirstUpFieldAliasName(criterionMetadata.getFirstUpFieldAliasName());
         return copy;
 
     }

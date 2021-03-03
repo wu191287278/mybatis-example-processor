@@ -1,6 +1,6 @@
 package com.vcg.mybatis.example.processor.domain;
 
-public class Criterion {
+public class CriterionMetadata {
 
     private String firstUpFieldName;
 
@@ -33,6 +33,12 @@ public class Criterion {
     private boolean greaterThanOrEqualTo;
 
     private boolean lessThanOrEqualTo;
+
+    private boolean single = true;
+
+    private boolean collection;
+
+    private boolean between;
 
     public String getFirstUpFieldName() {
         return firstUpFieldName;
@@ -88,6 +94,9 @@ public class Criterion {
 
     public void setIn(boolean in) {
         this.in = in;
+        this.collection = true;
+        this.single = false;
+        this.between = false;
     }
 
     public boolean isNotIn() {
@@ -96,6 +105,9 @@ public class Criterion {
 
     public void setNotIn(boolean notIn) {
         this.notIn = notIn;
+        this.collection = true;
+        this.single = false;
+        this.between = false;
     }
 
     public boolean isEqualTo() {
@@ -173,12 +185,38 @@ public class Criterion {
         return javaDoc;
     }
 
-    public Criterion setJavaDoc(String javaDoc) {
+    public CriterionMetadata setJavaDoc(String javaDoc) {
 
         this.javaDoc = javaDoc;
         if (javaDoc != null && javaDoc.length() > 1) {
             this.javaDoc = javaDoc.substring(0, javaDoc.length() - 1);
         }
         return this;
+    }
+
+    public boolean isCollection() {
+        return collection;
+    }
+
+    public void setCollection(boolean collection) {
+        this.collection = collection;
+    }
+
+    public boolean isSingle() {
+        return single;
+    }
+
+    public void setSingle(boolean single) {
+        this.single = single;
+    }
+
+    public boolean isBetween() {
+        return between;
+    }
+
+    public void setBetween(boolean between) {
+        this.between = between;
+        this.single = false;
+        this.collection = false;
     }
 }

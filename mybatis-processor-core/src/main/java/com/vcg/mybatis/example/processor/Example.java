@@ -2,6 +2,8 @@ package com.vcg.mybatis.example.processor;
 
 import java.lang.annotation.*;
 
+import com.vcg.mybatis.example.processor.annotation.ExampleQuery;
+
 @Documented
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
@@ -13,8 +15,8 @@ public @interface Example {
     String namespace();
 
     /**
-     * 是否生成query对象.
+     * Query对象属性.
      */
-    boolean query() default false;
+    ExampleQuery query() default @ExampleQuery;
 
 }

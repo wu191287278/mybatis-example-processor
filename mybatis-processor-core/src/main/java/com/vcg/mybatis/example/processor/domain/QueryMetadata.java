@@ -12,11 +12,23 @@ public class QueryMetadata {
 
     private String queryClazzSimpleName;
 
-    private List<Criteria> criteria;
+    private List<CriteriaMetadata> criteria;
 
-    private Boolean page;
+    private String page;
 
-    private Boolean orderBy;
+    private String size;
+
+    private String orderBy;
+
+    private String sort;
+
+    private Integer pageDefault;
+
+    private Integer sizeDefault;
+
+    private String orderByDefault;
+
+    private String sortDefault;
 
     public String getExampleClazzName() {
         return exampleClazzName;
@@ -40,11 +52,11 @@ public class QueryMetadata {
         return this;
     }
 
-    public List<Criteria> getCriteria() {
+    public List<CriteriaMetadata> getCriteria() {
         return criteria;
     }
 
-    public void setCriteria(List<Criteria> criteria) {
+    public void setCriteria(List<CriteriaMetadata> criteria) {
         this.criteria = criteria;
     }
 
@@ -57,22 +69,6 @@ public class QueryMetadata {
         return this;
     }
 
-    public Boolean getOrderBy() {
-        return orderBy;
-    }
-
-    public void setOrderBy(Boolean orderBy) {
-        this.orderBy = orderBy;
-    }
-
-    public Boolean getPage() {
-        return page;
-    }
-
-    public void setPage(Boolean page) {
-        this.page = page;
-    }
-
     public String getQueryClazzSimpleName() {
         return queryClazzSimpleName;
     }
@@ -80,4 +76,69 @@ public class QueryMetadata {
     public void setQueryClazzSimpleName(String queryClazzSimpleName) {
         this.queryClazzSimpleName = queryClazzSimpleName;
     }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public Integer getPageDefault() {
+        return pageDefault;
+    }
+
+    public void setPageDefault(Integer pageDefault) {
+        this.pageDefault = pageDefault;
+    }
+
+    public Integer getSizeDefault() {
+        return sizeDefault;
+    }
+
+    public void setSizeDefault(Integer sizeDefault) {
+        this.sizeDefault = sizeDefault;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public String getOrderByDefault() {
+        return orderByDefault;
+    }
+
+    public void setOrderByDefault(String orderByDefault) {
+        this.orderByDefault = orderByDefault;
+    }
+
+    public String getSortDefault() {
+        return sortDefault;
+    }
+
+    public void setSortDefault(String sortDefault) {
+        this.sortDefault = sortDefault;
+    }
+
 }
