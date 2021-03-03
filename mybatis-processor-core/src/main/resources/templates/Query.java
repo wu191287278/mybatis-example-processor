@@ -49,6 +49,46 @@ public class {{query.queryClazzSimpleName}} {
 
 {{/criteria}}
 {{/query.criteria}}
+{{#query.page}}
+	public Integer get{{query.firstUpPage}}(){
+		return this.{{query.page}};
+	}
+
+	public {{query.queryClazzSimpleName}} set{{query.firstUpPage}}(Integer {{query.page}}){
+		this.{{query.page}} = {{query.page}};
+		return this;
+	}
+{{/query.page}}
+{{#query.size}}
+	public Integer get{{query.firstUpSize}}(){
+		return this.{{query.size}};
+	}
+
+	public {{query.queryClazzSimpleName}} set{{query.firstUpSize}}(Integer {{query.size}}){
+		this.{{query.size}} = {{query.size}};
+		return this;
+	}
+{{/query.size}}
+{{#query.orderBy}}
+	public Integer get{{query.firstUpOrderBy}}(){
+		return this.{{query.size}};
+	}
+
+	public {{query.queryClazzSimpleName}} set{{query.firstUpOrderBy}}(String {{query.orderBy}}){
+		this.{{query.orderBy}} = {{query.orderBy}};
+		return this;
+	}
+{{/query.orderBy}}
+{{#query.sort}}
+	public Integer get{{query.firstUpSort}}(){
+		return this.{{query.size}};
+	}
+
+	public {{query.queryClazzSimpleName}} set{{query.firstUpSort}}(String {{query.sort}}){
+		this.{{query.sort}} = {{query.sort}};
+		return this;
+	}
+{{/query.sort}}
 
 {{#query.criteria}}
 {{#criteria}}

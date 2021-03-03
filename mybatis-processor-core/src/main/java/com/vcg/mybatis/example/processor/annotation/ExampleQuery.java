@@ -3,7 +3,7 @@ package com.vcg.mybatis.example.processor.annotation;
 import java.lang.annotation.*;
 
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 @Documented
 public @interface ExampleQuery {
 

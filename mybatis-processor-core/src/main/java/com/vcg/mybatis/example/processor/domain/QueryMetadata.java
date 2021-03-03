@@ -2,6 +2,8 @@ package com.vcg.mybatis.example.processor.domain;
 
 import java.util.List;
 
+import com.vcg.mybatis.example.processor.util.CamelUtils;
+
 public class QueryMetadata {
 
     private String packageName;
@@ -21,6 +23,14 @@ public class QueryMetadata {
     private String orderBy;
 
     private String sort;
+
+    private String firstUpPage;
+
+    private String firstUpSize;
+
+    private String firstUpOrderBy;
+
+    private String firstUpSort;
 
     private Integer pageDefault;
 
@@ -83,6 +93,7 @@ public class QueryMetadata {
 
     public void setSize(String size) {
         this.size = size;
+        this.firstUpSize = CamelUtils.firstUp(size);
     }
 
     public Integer getPageDefault() {
@@ -107,6 +118,7 @@ public class QueryMetadata {
 
     public void setPage(String page) {
         this.page = page;
+        this.firstUpPage = CamelUtils.firstUp(page);
     }
 
     public String getOrderBy() {
@@ -115,6 +127,7 @@ public class QueryMetadata {
 
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
+        this.firstUpOrderBy = CamelUtils.firstUp(orderBy);
     }
 
     public String getSort() {
@@ -123,6 +136,7 @@ public class QueryMetadata {
 
     public void setSort(String sort) {
         this.sort = sort;
+        this.firstUpSort = CamelUtils.firstUp(sort);
     }
 
     public String getOrderByDefault() {
@@ -141,4 +155,35 @@ public class QueryMetadata {
         this.sortDefault = sortDefault;
     }
 
+    public String getFirstUpPage() {
+        return firstUpPage;
+    }
+
+    public void setFirstUpPage(String firstUpPage) {
+        this.firstUpPage = firstUpPage;
+    }
+
+    public String getFirstUpSize() {
+        return firstUpSize;
+    }
+
+    public void setFirstUpSize(String firstUpSize) {
+        this.firstUpSize = firstUpSize;
+    }
+
+    public String getFirstUpOrderBy() {
+        return firstUpOrderBy;
+    }
+
+    public void setFirstUpOrderBy(String firstUpOrderBy) {
+        this.firstUpOrderBy = firstUpOrderBy;
+    }
+
+    public String getFirstUpSort() {
+        return firstUpSort;
+    }
+
+    public void setFirstUpSort(String firstUpSort) {
+        this.firstUpSort = firstUpSort;
+    }
 }

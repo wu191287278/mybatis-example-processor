@@ -30,4 +30,14 @@ public class CamelUtils {
         return String.join("_", split(source, true));
     }
 
+    public static String firstUp(String name) {
+        if (name != null) {
+            if (name.length() == 1) {
+                return name.toUpperCase();
+            } else {
+                return name.substring(0, 1).toUpperCase() + name.substring(1);
+            }
+        }
+        return name;
+    }
 }
