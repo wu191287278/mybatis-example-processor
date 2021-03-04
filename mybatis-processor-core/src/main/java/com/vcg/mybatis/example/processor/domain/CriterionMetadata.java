@@ -40,6 +40,10 @@ public class CriterionMetadata {
 
     private boolean between;
 
+    private String dateFormat;
+
+    private boolean numberFormat;
+
     public String getFirstUpFieldName() {
         return firstUpFieldName;
     }
@@ -218,5 +222,21 @@ public class CriterionMetadata {
         this.between = between;
         this.single = false;
         this.collection = false;
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
+    }
+
+    public boolean isNumberFormat() {
+        return numberFormat;
+    }
+
+    public void setNumberFormat(boolean numberFormat) {
+        this.numberFormat = numberFormat;
     }
 }

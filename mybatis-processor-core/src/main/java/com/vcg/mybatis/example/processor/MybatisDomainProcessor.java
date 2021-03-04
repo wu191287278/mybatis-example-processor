@@ -287,10 +287,19 @@ public class MybatisDomainProcessor extends AbstractProcessor {
                 } else {
                     criterionMetadata.setEqualTo(true);
                 }
+
             } else {
                 criterionMetadata.setFieldName(name);
                 criterionMetadata.setSingle(true);
                 criterionMetadata.setEqualTo(true);
+            }
+
+
+            if (!exampleQuery.dateFormat().equals("")) {
+                criterionMetadata.setDateFormat(exampleQuery.dateFormat());
+                criterionMetadata.setNumberFormat(false);
+            } else {
+                criterionMetadata.setNumberFormat(true);
             }
 
             member.asType().accept(queryTypeVisitor, criterionMetadata);

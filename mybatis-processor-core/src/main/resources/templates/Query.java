@@ -41,9 +41,10 @@ public class {{query.queryClazzSimpleName}} {
 	 */
 	{{/javaDoc}}
 	{{#single}}private {{javaType}} {{fieldName}};{{/single}}{{#collection}}private java.util.List<{{javaType}}> {{fieldName}};{{/collection}}
-	{{#between}}
+	{{#between}}{{#numberFormat}}@org.springframework.format.annotation.NumberFormat{{/numberFormat}}{{#dateFormat}}@org.springframework.format.annotation.DateTimeFormat(pattern = "{{pattern}}"){{/dateFormat}}
 	private {{javaType}} start{{firstUpFieldName}};
 
+	{{#numberFormat}}@org.springframework.format.annotation.NumberFormat{{/numberFormat}}{{#dateFormat}}@org.springframework.format.annotation.DateTimeFormat(pattern = "{{pattern}}"){{/dateFormat}}
 	private {{javaType}} end{{firstUpFieldName}};
 	{{/between}}
 

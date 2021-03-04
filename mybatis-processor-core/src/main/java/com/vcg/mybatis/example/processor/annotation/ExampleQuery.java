@@ -9,6 +9,11 @@ public @interface ExampleQuery {
 
     boolean enable() default false;
 
+
+    String dateFormat() default "";
+
+    boolean numberFormat() default true;
+
     /**
      * 全部字段.
      */
