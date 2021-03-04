@@ -295,14 +295,8 @@ public class MybatisDomainProcessor extends AbstractProcessor {
             }
 
 
-            if (!exampleQuery.dateFormat().equals("")) {
-                criterionMetadata.setDateFormat(exampleQuery.dateFormat());
-                criterionMetadata.setNumberFormat(false);
-            } else {
-                criterionMetadata.setNumberFormat(true);
-            }
-
             member.asType().accept(queryTypeVisitor, criterionMetadata);
+
 
             if (criterionMetadata.getFieldName() == null) {
                 continue;
@@ -310,6 +304,13 @@ public class MybatisDomainProcessor extends AbstractProcessor {
             String javaType = criterionMetadata.getJavaType();
             if (javaType.equals("Date") || javaType.equals("java.util.Date")) {
                 criterionMetadata.setBetween(true);
+                if (!exampleQuery.dateFormat().equals("")) {
+                    criterionMetadata.setDateFormat(exampleQuery.dateFormat());
+                    criterionMetadata.setNumberFormat(false);
+                } else {
+                    criterionMetadata.setJavaType("java.lang.Long");
+                    criterionMetadata.setNumberFormat(true);
+                }
             }
 
             String docComment = elementUtils.getDocComment(member);

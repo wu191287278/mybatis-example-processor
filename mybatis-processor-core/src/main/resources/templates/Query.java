@@ -41,10 +41,10 @@ public class {{query.queryClazzSimpleName}} {
 	 */
 	{{/javaDoc}}
 	{{#single}}private {{javaType}} {{fieldName}};{{/single}}{{#collection}}private java.util.List<{{javaType}}> {{fieldName}};{{/collection}}
-	{{#between}}{{#numberFormat}}@org.springframework.format.annotation.NumberFormat{{/numberFormat}}{{#dateFormat}}@org.springframework.format.annotation.DateTimeFormat(pattern = "{{pattern}}"){{/dateFormat}}
+	{{#between}}{{#dateFormat}}@org.springframework.format.annotation.DateTimeFormat(pattern = "{{pattern}}"){{/dateFormat}}
 	private {{javaType}} start{{firstUpFieldName}};
 
-	{{#numberFormat}}@org.springframework.format.annotation.NumberFormat{{/numberFormat}}{{#dateFormat}}@org.springframework.format.annotation.DateTimeFormat(pattern = "{{pattern}}"){{/dateFormat}}
+	{{#dateFormat}}@org.springframework.format.annotation.DateTimeFormat(pattern = "{{pattern}}"){{/dateFormat}}
 	private {{javaType}} end{{firstUpFieldName}};
 	{{/between}}
 
@@ -165,10 +165,10 @@ public class {{query.queryClazzSimpleName}} {
 		{{#between}}
         if (start{{firstUpFieldName}} != null || end{{firstUpFieldName}} !=null) {
         	if(start{{firstUpFieldName}} != null){
-				query.and{{firstUpFieldName}}GreaterThanOrEqualTo(start{{firstUpFieldName}});
+				query.and{{firstUpFieldName}}GreaterThanOrEqualTo({{^numberFormat}}start{{firstUpFieldName}}{{/numberFormat}}{{#numberFormat}}new java.util.Date(start{{firstUpFieldName}}){{/numberFormat}});
 			}
         	if(end{{firstUpFieldName}} != null){
-				query.and{{firstUpFieldName}}LessThanOrEqualTo(end{{firstUpFieldName}});
+				query.and{{firstUpFieldName}}LessThanOrEqualTo({{^numberFormat}}end{{firstUpFieldName}}{{/numberFormat}}{{#numberFormat}}new java.util.Date(end{{firstUpFieldName}}){{/numberFormat}});
 			}
         }
 		{{/between}}
