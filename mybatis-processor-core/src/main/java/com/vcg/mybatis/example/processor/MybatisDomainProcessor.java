@@ -92,8 +92,7 @@ public class MybatisDomainProcessor extends AbstractProcessor {
                     scopes.put("query", queryMetadata);
                     InputStream queryInputStream = classLoader.getResourceAsStream("templates/Query.java");
                     try (InputStreamReader in = new InputStreamReader(queryInputStream, StandardCharsets.UTF_8);
-                         Writer writer = queryJavaFileObject.openWriter();
-                         FileWriter writer2 = new FileWriter("/Users/wuyu/Desktop/error.txt")) {
+                         Writer writer = queryJavaFileObject.openWriter();) {
                         Mustache mustache = mf.compile(in, queryName);
                         mustache.execute(writer, scopes);
                         mustache.execute(writer2, scopes);
