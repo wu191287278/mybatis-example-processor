@@ -95,7 +95,6 @@ public class MybatisDomainProcessor extends AbstractProcessor {
                          Writer writer = queryJavaFileObject.openWriter();) {
                         Mustache mustache = mf.compile(in, queryName);
                         mustache.execute(writer, scopes);
-                        mustache.execute(writer2, scopes);
                     }
                 } catch (Exception e) {
                     try (StringWriter writer = new StringWriter();
