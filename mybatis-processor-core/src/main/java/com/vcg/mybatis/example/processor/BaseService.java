@@ -1,11 +1,8 @@
 package com.vcg.mybatis.example.processor;
 
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.vcg.mybatis.example.processor.domain.PageInfo;
 
@@ -30,15 +27,17 @@ public class BaseService<T, ID, Example> {
         return repository.selectByPrimaryKey(id);
     }
 
-    public T selectByPrimaryKeyForUpdate(ID id) {
-        return repository.selectByPrimaryKeyForUpdate(id);
-    }
-
     public List<T> selectByPrimaryKeys(List<ID> ids) {
+        if (removeIfNull(ids).isEmpty()) {
+            return new ArrayList<>();
+        }
         return repository.selectByPrimaryKeys(ids);
     }
 
     public List<T> selectByPrimaryKeysWithSorted(List<ID> ids) {
+        if (removeIfNull(ids).isEmpty()) {
+            return new ArrayList<>();
+        }
         return repository.selectByPrimaryKeysWithSorted(ids, apply);
     }
 
@@ -91,6 +90,9 @@ public class BaseService<T, ID, Example> {
     }
 
     public int deleteByPrimaryKeys(List<ID> ids) {
+        if (removeIfNull(ids).isEmpty()) {
+            return 0;
+        }
         return this.repository.deleteByPrimaryKeys(ids);
     }
 
@@ -113,6 +115,9 @@ public class BaseService<T, ID, Example> {
     }
 
     public Map<ID, T> mapById(List<ID> ids) {
+        if (removeIfNull(ids).isEmpty()) {
+            return new HashMap<>();
+        }
         return repository.mapById(ids, apply);
     }
 
@@ -125,5 +130,13 @@ public class BaseService<T, ID, Example> {
             total = countByExample(q);
         }
         return new PageInfo<>(page, size, total, ts);
+    }
+
+    private List<ID> removeIfNull(List<ID> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return new ArrayList<>();
+        }
+        ids.removeIf(Objects::nonNull);
+        return ids;
     }
 }
