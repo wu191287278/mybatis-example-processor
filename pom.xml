@@ -21,27 +21,6 @@
     </properties>
 
 
-    <repositories>
-        <repository>
-            <id>maven-releases</id>
-            <url>http://nexus.tsa.cn/repository/maven-releases/</url>
-        </repository>
-        <repository>
-            <id>maven-snapshots</id>
-            <url>http://nexus.tsa.cn/repository/maven-snapshots/</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>maven-releases</id>
-            <url>http://nexus.tsa.cn/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>http://nexus.tsa.cn/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
     <build>
         <plugins>
             <plugin>
