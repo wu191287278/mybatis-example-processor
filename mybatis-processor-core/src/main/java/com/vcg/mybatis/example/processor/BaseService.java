@@ -136,7 +136,7 @@ public class BaseService<T, ID, Example> {
         if (ids == null || ids.isEmpty()) {
             return new ArrayList<>();
         }
-        ids.removeIf(Objects::nonNull);
+        ids.removeIf(Objects::isNull);
         return ids;
     }
 }
